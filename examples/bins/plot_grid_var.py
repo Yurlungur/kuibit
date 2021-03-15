@@ -134,7 +134,7 @@ if __name__ == "__main__":
         logger.setLevel(logging.DEBUG)
 
     logger.debug(f"Reading variable {args.variable}")
-    sim = SimDir(args.datadir)
+    sim = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks)
     reader = sim.gridfunctions[args.plane]
     logger.debug(f"Variables available {reader}")
     var = reader[args.variable]

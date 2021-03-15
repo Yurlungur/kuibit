@@ -41,7 +41,7 @@ if __name__ == "__main__":
     )
     args = pah.get_args(parser)
 
-    reader = SimDir(args.datadir).gridfunctions
+    reader = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks).gridfunctions
 
     # We loop over dimensions
     if args.dimension is not None:

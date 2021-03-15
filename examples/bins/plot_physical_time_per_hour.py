@@ -54,7 +54,7 @@ if __name__ == "__main__":
         logging.basicConfig(format="%(asctime)s - %(message)s")
         logger.setLevel(logging.DEBUG)
 
-    sim = SimDir(args.datadir)
+    sim = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks)
 
     if "physical_time_per_hour" not in sim.ts.scalar:
         raise ValueError("physical_time_per_hour not available")

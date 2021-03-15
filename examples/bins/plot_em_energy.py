@@ -57,7 +57,7 @@ if __name__ == "__main__":
     else:
         figname = args.figname
 
-    sim = SimDir(args.datadir)
+    sim = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks)
 
     radius = sim.electromagneticwaves.radii[args.detector_num]
 

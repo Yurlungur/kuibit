@@ -27,4 +27,4 @@ if __name__ == "__main__":
     desc = __doc__
     parser = pah.init_argparse(desc)
     args = pah.get_args(parser)
-    print(SimDir(args.datadir).timeseries)
+    print(SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks).timeseries)

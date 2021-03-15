@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     logger.debug(f"Figname: {figname}")
 
-    sim = SimDir(args.datadir)
+    sim = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks)
     sim_hor = sim.horizons
 
     logger.debug(

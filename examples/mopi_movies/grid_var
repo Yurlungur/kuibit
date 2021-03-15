@@ -83,7 +83,7 @@ class MOPIMovie:
 
     def __init__(self, args):
 
-        self.sim = SimDir(args.datadir)
+        self.sim = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks)
         self.x0, self.x1, self.res = args.origin, args.corner, args.resolution
         self.shape = [self.res, self.res]
         self.reader = self.sim.gridfunctions[args.plane]

@@ -98,7 +98,7 @@ if __name__ == "__main__":
         logger.setLevel(logging.DEBUG)
 
     logger.debug("Reading variable MRI_lambda")
-    sim = SimDir(args.datadir)
+    sim = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks)
     reader = sim.gridfunctions[args.plane]
     logger.debug(f"Variables available {reader}")
     var = reader["MRI_lambda"]
