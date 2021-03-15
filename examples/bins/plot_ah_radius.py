@@ -50,8 +50,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dx",
         type=float,
-        help=("Grid resolution where the horizon is,"
-              " assuming the entire horizon has this resolution"),
+        help=(
+            "Grid resolution where the horizon is,"
+            " assuming the entire horizon has this resolution"
+        ),
     )
 
     args = pah.get_args(parser)

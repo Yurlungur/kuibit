@@ -58,7 +58,9 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--draw-horizons", help="Draw the apparent horizons, if available", action="store_true"
+        "--draw-horizons",
+        help="Draw the apparent horizons, if available",
+        action="store_true",
     )
     args = pah.get_args(parser)
 

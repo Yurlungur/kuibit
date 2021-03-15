@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--parsable",
-        action='store_true',
+        action="store_true",
         help="Just print the number",
     )
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     time_found = sim_hor[0, args.horizon].formation_time
 
-    if (args.parsable):
+    if args.parsable:
         print(f"{time_found}")
     else:
         print(f"Horizon {args.horizon} was first found at time {time_found}")
