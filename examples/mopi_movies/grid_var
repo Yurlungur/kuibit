@@ -20,7 +20,7 @@
 
 from kuibit.simdir import SimDir
 from kuibit import argparse_helper as pah
-from kuibit.visualize import (
+from kuibit.visualize_matplotlib import (
     setup_matplotlib,
     plot_color,
     add_text_to_figure_corner,
