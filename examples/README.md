@@ -28,9 +28,9 @@ analyses). You are encourages to define the `MOPI_MOVIES_DIR` and the
   a function of time.
 - `plot_constraints`, plot the absolute value of the violation of the
   constraints over time.
-- `plot_psi4`, plot Psi4 as measured at a given distance and a given multipolar
+- `plot_psi4_lm`, plot Psi4 as measured at a given distance and a given multipolar
   decomposition.
-- `plot_strain`, plot the strain as measured at a given distance and a given
+- `plot_strain_lm`, plot the strain as measured at a given distance and a given
   multipolar decomposition.
 - `plot_phsical_time_per_hour`, plot the computational speed as measured by Carpet's
   `physical_time_per_hour`.
