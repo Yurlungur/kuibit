@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, see <https://www.gnu.org/licenses/>.
 
-import logging
-
 from kuibit.simdir import SimDir
 from kuibit import argparse_helper as pah
 
@@ -41,7 +39,9 @@ if __name__ == "__main__":
     )
     args = pah.get_args(parser)
 
-    reader = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks).gridfunctions
+    reader = SimDir(
+        args.datadir, ignore_symlinks=args.ignore_symlinks
+    ).gridfunctions
 
     # We loop over dimensions
     if args.dimension is not None:
