@@ -92,9 +92,9 @@ if __name__ == "__main__":
     # Plot
     plt.ylabel(f"Radius of horizon {ah}")
     plt.xlabel("Time")
-    plt.plot(horizon.mean_radius / args.dx)
-    plt.plot(horizon.min_radius / args.dx)
-    plt.plot(horizon.max_radius / args.dx)
+    plt.plot(horizon.mean_radius / args.dx if args.dx else horizon.mean_radius)
+    plt.plot(horizon.min_radius / args.dx if args.dx else horizon.min_radius)
+    plt.plot(horizon.max_radius / args.dx if args.dx else horizon.max_radius)
 
     if args.dx:
         logger.debug("Adding resolution y axis")
