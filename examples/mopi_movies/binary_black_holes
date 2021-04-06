@@ -1,0 +1,299 @@
+#!/usr/bin/env python3
+
+# Copyright (C) 2021 Gabriele Bozzola
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, see <https://www.gnu.org/licenses/>.
+
+"""Make a video of up to two given apparent horizons.
+
+The video can be enhanced with the addition of the gravitational-wave signal at
+the bottom. Unfortunately, mayavi and matplotlib don't play nicely together and
+problem arise when they are both used at the same time. So, if you want to have
+the gravitational-wave signal, run this movie with the flag --gw-show. The
+movie will not be rendered and there will be a ffmpeg error. This is normal.
+Next, run the movie `binary_black_holes_gw` with the same exact arguments. This
+will produce the correct movie.
+
+"""
+
+from mayavi import mlab
+
+from kuibit.simdir import SimDir
+from kuibit.visualize_mayavi import (
+    create_figure,
+    disable_interactive_window,
+    add_text_to_figure_corner,
+    plot_apparent_horizon,
+    plot_ah_trajectory,
+    plot_horizon_vector,
+    save,
+)
+
+
+def mopi_add_custom_options(parser):
+    parser.add_argument(
+        "--ignore-symlinks",
+        action="store_true",
+        help="Ignore symlinks in the data directory",
+    )
+    parser.add_argument("--datadir", default=".", help="Data directory")
+    parser.add_argument(
+        "--ah-color", default=(1, 1, 1), help="Color of the horizons."
+    )
+    parser.add_argument(
+        "--bg-color", default=(0, 0, 0), help="Color of the background."
+    )
+    parser.add_argument(
+        "--fg-color", default=(1, 1, 1), help="Color of the foreground."
+    )
+    parser.add_argument(
+        "--arrow-color", default=(1, 0, 0), help="Color of the arrows."
+    )
+
+    parser.add_argument(
+        "--resolution",
+        default=(1920, 1080),
+        nargs="+",
+        type=int,
+        help="Resolution of the movie.",
+    )
+
+    parser.add_argument(
+        "--ah1",
+        type=int,
+        default=1,
+        help="Apparent horizon 1",
+    )
+
+    parser.add_argument(
+        "--ah2",
+        type=int,
+        default=2,
+        help="Apparent horizon 2",
+    )
+
+    parser.add_argument(
+        "--cah",
+        type=int,
+        default=3,
+        help="Common apparent horizon",
+    )
+
+    parser.add_argument(
+        "--qlm1",
+        type=int,
+        default=-1,
+        help="QLM index associated to apparent horizon 1",
+    )
+
+    parser.add_argument(
+        "--qlm2",
+        type=int,
+        default=-1,
+        help="QLM index associated to apparent horizon 2",
+    )
+
+    parser.add_argument(
+        "--cqlm",
+        type=int,
+        default=-1,
+        help="QLM index associated to the apparent horizon",
+    )
+
+    parser.add_argument(
+        "--orientation-axes-show",
+        action="store_true",
+        help="Show orientation axes",
+    )
+
+    parser.add_argument(
+        "--trajectory-show",
+        action="store_true",
+        help="Show black holes trajectory",
+    )
+
+    parser.add_argument(
+        "--spin-show",
+        action="store_true",
+        help="Show black holes spins",
+    )
+
+    parser.add_argument(
+        "--grid-fudge-factor",
+        type=float,
+        default=0,
+        help="Fudge factor used to ensure that the frame does not move in the video."
+        " If your video is shaky, increase this.",
+    )
+
+    parser.add_argument(
+        "--camera-distance",
+        type=float,
+        help="Force the camera at this distance.",
+
+    )
+
+    parser.add_argument(
+        "--gw-show",
+        action="store_true",
+        help="Show gravitational-wave strain given a (l,m) mode."
+        "This requires a special setup. See description.",
+    )
+
+    parser.add_argument(
+        "--detector-num",
+        type=int,
+        help="Number of the spherical surface over which to read Psi4",
+    )
+
+    parser.add_argument(
+        "--pcut",
+        type=float,
+        help="Period for the fixed frequency integration",
+    )
+
+    parser.add_argument(
+        "--mult-l", type=int, default=2, help="Multipole number l"
+    )
+    parser.add_argument(
+        "--mult-m", type=int, default=2, help="Multipole number m"
+    )
+
+
+class MOPIMovie:
+    def __init__(self, args):
+
+        self.sim = SimDir(args.datadir, ignore_symlinks=args.ignore_symlinks)
+
+        self.ah_color = args.ah_color
+        self.background_color = args.bg_color
+        self.foreground_color = args.fg_color
+        self.arrow_color = args.arrow_color
+
+        self.camera_distance = args.camera_distance
+
+        self.size = args.resolution
+
+        if args.gw_show:
+            self.size[1] *= 0.9
+
+        self.ah1 = self.sim.horizons[args.qlm1, args.ah1]
+        self.ah2 = self.sim.horizons[args.qlm2, args.ah2]
+
+        iterations1 = self.ah1.shape_iterations
+        iterations2 = self.ah2.shape_iterations
+
+        if args.cah in self.sim.horizons.available_apparent_horizons:
+            self.cah = self.sim.horizons[args.cqlm, args.cah]
+            citerations = self.cah.shape_iterations
+        else:
+            print("No common apparent horizon found")
+            self.cah = None
+            citerations = []
+
+        # We either have 1 and 2, or we have the common horizon
+        self.iterations = [
+            it for it in iterations1 if it in iterations2
+        ] + citerations
+
+        self.oxes_show = args.orientation_axes_show
+        self.trajectory_show = args.trajectory_show
+        self.spin_show = args.spin_show
+        self.gw_show = args.gw_show
+
+        if self.gw_show:
+            # TODO: Add checks!
+            pass
+
+        self.args = args
+
+        # Mayavi doesn't have a good way to define the extent to plot, so each
+        # frame will have a different coordinate system, and there will be
+        # glitches in the movie. So, we find three points that we are going to
+        # use to set the extrema of our visualization box. These have to be
+        # further than anything in the visualization. Hopefully, the centroids
+        # will give a good sense.
+
+        self.min, self.max = {}, {}
+
+        for ax in ("x", "y", "z"):
+            max1 = self.ah1.ah[f"centroid_{ax}"].max()
+            min1 = self.ah1.ah[f"centroid_{ax}"].min()
+            max2 = self.ah2.ah[f"centroid_{ax}"].max()
+            min2 = self.ah2.ah[f"centroid_{ax}"].min()
+            if self.cah:
+                cmax = self.cah.ah[f"centroid_{ax}"].max()
+                cmin = self.cah.ah[f"centroid_{ax}"].min()
+            else:
+                cmin, cmax = min1, max1
+
+            self.min[f"{ax}"] = min(min1, min2, cmin) - args.grid_fudge_factor
+            self.max[f"{ax}"] = max(max1, max2, cmax) + args.grid_fudge_factor
+
+    def get_frames(self):
+        return self.iterations
+
+    def make_frame(self, path, iteration):
+        disable_interactive_window()
+        create_figure(self.background_color, self.foreground_color, self.size)
+
+        # This is a trick to keep the frame extent constant
+        # We place 6 points at the vertices of a cube. In practice, this
+        # is a way to force the extent of the grid to be what we want.
+        xm, xM = self.min["x"], self.max["x"]
+        ym, yM = self.min["y"], self.max["y"]
+        zm, zM = self.min["z"], self.max["z"]
+
+        fakeX = [xm, xm, xm, xM, xM, xM]
+        fakeY = [ym, ym, yM, yM, yM, ym]
+        fakeZ = [zm, zM, zM, zM, zm, zm]
+
+        mlab.points3d(
+            fakeX,
+            fakeY,
+            fakeZ,
+            color=self.background_color,
+            scale_factor=0.1,
+        )
+
+        if self.spin_show:
+            plot_horizon_vector(self.ah1, "coordspin", iteration,
+                                color=self.arrow_color)
+            plot_horizon_vector(self.ah2, "coordspin", iteration,
+                                color=self.arrow_color)
+
+        plot_apparent_horizon(self.ah1, iteration, color=self.ah_color)
+        plot_apparent_horizon(self.ah2, iteration, color=self.ah_color)
+
+        time = self.ah2.shape_time_at_iteration(iteration)
+
+        if self.trajectory_show:
+            plot_ah_trajectory(self.ah1, time=time)
+            plot_ah_trajectory(self.ah2, time=time)
+
+        if self.oxes_show:
+            mlab.orientation_axes()
+
+        if self.camera_distance:
+            mlab.view(distance=self.camera_distance)
+
+        output_path = "".join(path.split(".")[:-1])
+        extension = path.split(".")[-1]
+
+        if self.gw_show:
+            save(output_path + "vi", extension)
+        else:
+            save(output_path, extension)
+        mlab.close()
+
