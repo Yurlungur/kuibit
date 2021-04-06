@@ -36,6 +36,8 @@ analyses). You are encourages to define the `MOPI_MOVIES_DIR` and the
   `physical_time_per_hour`.
 - `plot_gw_energy`, plot the instantaneous power and cumulative energy lost via
    gravitational waves as measured at a given distance.
+- `plot_gw_linear_momentum`, plot the instantaneous force and cumulative linear momentum
+   along the z direction lost via gravitational waves as measured at a given distance.
 - `plot_em_energy`, plot the instantaneous power and cumulative energy lost via
    electromagnetic waves as measured at a given distance.
 - `plot_total_luminosity`, plot the total luminosity (gravitational waves +
