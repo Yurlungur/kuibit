@@ -115,11 +115,11 @@ if __name__ == "__main__":
 
     plt.plot(
         strain.real(),
-        label=fr"$r_{{\mathrm{{ex}}}} h^{{{args.mult_l}{args.mult_l}}}_+$",
+        label=fr"$r_{{\mathrm{{ex}}}} h^{{{args.mult_l}{args.mult_m}}}_+$",
     )
     plt.plot(
         -strain.imag(),
-        label=fr"$r_{{\mathrm{{ex}}}} h^{{{args.mult_l}{args.mult_l}}}_\times$",
+        label=fr"$r_{{\mathrm{{ex}}}} h^{{{args.mult_l}{args.mult_m}}}_\times$",
     )
 
     plt.legend()
