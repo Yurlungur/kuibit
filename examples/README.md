@@ -18,7 +18,6 @@ analyses). You are encourages to define the `MOPI_MOVIES_DIR` and the
   command-line.
 - `plot_scalar`, plot any reduction of any variable as a time series.
 - `plot_1d_vars`, plot one or more along a 1D axis.
-- `plot_1d_vars`, plot one or more along a 1D axis.
 - `plot_ah_trajectories`, plot the trajectories of given apparent horizons (in
   3D or a projection on a plane).
 - `plot_ah_found`, plot a timeline of when the given horizons are found.
@@ -56,6 +55,11 @@ analyses). You are encourages to define the `MOPI_MOVIES_DIR` and the
 
 - `1d_vars`, plots a 1D variable as a function of time.
 - `grid_var`, plots a 2D variable as a function of time.
+- `binary_black_holes`, plots a binary inspiral (see gif below).
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Sbozzolo/kuibit/experimental/examples/bbh.gif">
+</p>
 
 ## Ciakfiles avaialble
 
