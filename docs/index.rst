@@ -82,6 +82,13 @@ place where to discuss it. Alternatively, you can also open an issue on GitHub.
 Frequently asked questions are collected in the page :ref:`faq:Frequently Asked
 Questions`.
 
+In addition to the tutorials that are presented in this page, real-world
+examples can be found `examples
+<https://github.com/Sbozzolo/kuibit/tree/experimental/examples>`_ folder of the
+``experimental`` branch. See the section `Experimental branch and examples
+<https://github.com/Sbozzolo/kuibit/#experimental-branch-and-examples>`_ for
+more information.
+
 Usage
 -----
 
@@ -116,8 +123,12 @@ Tutorials
    tutorials/cactus_horizons.ipynb
    tutorials/gravitational_waves.ipynb
 
-You can find some real-word examples in the folder ``examples`` in the
-``experimental`` branch.
+In addition to these tutorials, you can find real world examples in the
+`examples <https://github.com/Sbozzolo/kuibit/tree/experimental/examples>`_
+folder of the ``experimental`` branch. See the section `Experimental branch and
+examples
+<https://github.com/Sbozzolo/kuibit/#experimental-branch-and-examples>`_ for
+more information.
 
 Reference material (classes, functions, ...)
 ---------------------------------------------
@@ -125,6 +136,7 @@ Reference material (classes, functions, ...)
 .. toctree::
    :maxdepth: 1
 
+   testimonials.rst
    features.rst
    faq.rst
    simdir_ref.rst
