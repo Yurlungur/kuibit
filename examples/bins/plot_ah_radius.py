@@ -92,19 +92,19 @@ if __name__ == "__main__":
     # Plot
     plt.ylabel(f"Radius of horizon {ah}")
     plt.xlabel("Time")
-    plt.plot(horizon.mean_radius / args.dx if args.dx else horizon.mean_radius)
-    plt.plot(horizon.min_radius / args.dx if args.dx else horizon.min_radius)
-    plt.plot(horizon.max_radius / args.dx if args.dx else horizon.max_radius)
+    plt.plot(horizon.mean_radius, label="Mean radius")
+    plt.plot(horizon.min_radius, label="Min radius")
+    plt.plot(horizon.max_radius, label="Max radius")
+    plt.legend()
 
     if args.dx:
         logger.debug("Adding resolution y axis")
         plt.twinx()
-        plt.plot(horizon.mean_radius, label="Mean radius")
-        plt.plot(horizon.min_radius, label="Min radius")
-        plt.plot(horizon.max_radius, label="Max radius")
+        plt.plot(horizon.mean_radius / args.dx)
+        plt.plot(horizon.min_radius / args.dx)
+        plt.plot(horizon.max_radius / args.dx)
         plt.ylabel("Number of points on radius")
 
-    plt.legend()
     output_path = os.path.join(args.outdir, figname)
     logger.debug(f"Saving in {output_path}")
     plt.tight_layout()
