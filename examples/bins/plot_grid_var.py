@@ -211,7 +211,7 @@ if __name__ == "__main__":
                                                      iteration,
                                                      args.plane,
                                                      color=args.ah_color,
-                                                     edge_color=args.ah_edgecolor,
+                                                     edge_color=args.ah_edge_color,
                                                      alpha=args.ah_alpha,
                                                      axis=ax)
 

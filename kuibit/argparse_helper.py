@@ -140,7 +140,7 @@ def add_figure_to_parser(parser, default_figname=None):
     )
 
 
-def add_horizon_to_parser(parser, color="k", edgecolor="w", alpha=1):
+def add_horizon_to_parser(parser, color="k", edge_color="w", alpha=1):
     """Add parameters that have to do with a apparent horizons to a given parser.
 
     This function edits parser in place.
@@ -161,8 +161,8 @@ def add_horizon_to_parser(parser, color="k", edgecolor="w", alpha=1):
         help="Color name for horizons (default is '%(default)s').",
     )
     ah_group.add_argument(
-        "--ah-edgecolor",
-        default=edgecolor,
+        "--ah-edge-color",
+        default=edge_color,
         help="Color name for horizons boundary (default is '%(default)s').",
     )
     ah_group.add_argument(
