@@ -53,7 +53,7 @@ if __name__ == "__main__":
     array. """
 
     parser = pah.init_argparse(desc)
-    pah.add_grid_to_parser(parser)
+    pah.add_grid_to_parser(parser, dimensions=2)
     pah.add_figure_to_parser(parser)
     pah.add_horizon_to_parser(parser)
 
