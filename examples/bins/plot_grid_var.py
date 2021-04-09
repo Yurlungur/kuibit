@@ -26,6 +26,7 @@ from kuibit.visualize_matplotlib import (
     setup_matplotlib,
     plot_color,
     add_text_to_figure_corner,
+    plot_horizon_shape_on_plane_at_iteration,
     save,
 )
 
@@ -54,6 +55,7 @@ if __name__ == "__main__":
     parser = pah.init_argparse(desc)
     pah.add_grid_to_parser(parser)
     pah.add_figure_to_parser(parser)
+    pah.add_horizon_to_parser(parser)
 
     parser.add_argument(
         "--variable", type=str, required=True, help="Variable to plot"
@@ -179,6 +181,8 @@ if __name__ == "__main__":
             labelleft=False,
         )
 
+    ax = plt.gca()
+
     plot_color(
         data,
         x0=x0,
@@ -193,9 +197,23 @@ if __name__ == "__main__":
         vmax=args.vmax,
         label=label,
         interpolation=args.interpolation_method,
+        axis=ax,
     )
 
     add_text_to_figure_corner(fr"$t = {time:.3f}$")
+
+    if (args.ah_show):
+        for ah in sim.horizons.available_apparent_horizons:
+            # We don't care about the QLM index here
+            hor = sim.horizons[0, ah]
+            logger.debug(f"Plotting apparent horizon {ah}")
+            plot_horizon_shape_on_plane_at_iteration(hor,
+                                                     iteration,
+                                                     args.plane,
+                                                     color=args.ah_color,
+                                                     edge_color=args.ah_edgecolor,
+                                                     alpha=args.ah_alpha,
+                                                     axis=ax)
 
     output_path = os.path.join(args.outdir, figname)
     logger.debug(f"Saving in {output_path}")
