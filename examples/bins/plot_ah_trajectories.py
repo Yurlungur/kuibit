@@ -197,6 +197,8 @@ if __name__ == "__main__":
             # Try to draw the shape of the horizon
             if args.draw_horizons and time in horizons[ah].shape_times:
 
+                # TODO: Update this, now a function is available in visualize_matplotlib
+
                 cut = {
                     "xy": (None, None, 0),
                     "xz": (None, 0, None),
